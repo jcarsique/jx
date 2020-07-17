@@ -747,9 +747,8 @@ func (o *StepChangelogOptions) addIssuesAndPullRequests(spec *v1.ReleaseSpec, co
 				} else {
 					u, err := resolver.Resolve(issue.User)
 					if err != nil {
-						return err
-					}
-					if u != nil {
+						log.Logger().Warnf("Failed to resolve user %v for issue %s repository %s", issue.User, result, tracker.HomeURL())
+					} else if u != nil {
 						user = u.Spec
 					}
 				}
@@ -760,9 +759,8 @@ func (o *StepChangelogOptions) addIssuesAndPullRequests(spec *v1.ReleaseSpec, co
 				} else {
 					u, err := resolver.Resolve(issue.User)
 					if err != nil {
-						return err
-					}
-					if u != nil {
+						log.Logger().Warnf("Failed to resolve closedBy user %v for issue %s repository %s", issue.User, result, tracker.HomeURL())
+					} else if u != nil {
 						closedBy = u.Spec
 					}
 				}
@@ -773,7 +771,7 @@ func (o *StepChangelogOptions) addIssuesAndPullRequests(spec *v1.ReleaseSpec, co
 				} else {
 					u, err := resolver.GitUserSliceAsUserDetailsSlice(issue.Assignees)
 					if err != nil {
-						return err
+						log.Logger().Warnf("Failed to resolve Assignees %v for issue %s repository %s", issue.Assignees, result, tracker.HomeURL())
 					}
 					assignees = u
 				}
