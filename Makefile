@@ -5,8 +5,8 @@ SHELL := /bin/bash
 NAME := jx
 BUILD_TARGET = build
 MAIN_SRC_FILE=cmd/jx/jx.go
-GO := GO111MODULE=on go
-GO_NOMOD :=GO111MODULE=off go
+GO := GO111MODULE=on go1.12.17
+GO_NOMOD :=GO111MODULE=off go1.12.17
 REV := $(shell git rev-parse --short HEAD 2> /dev/null || echo 'unknown')
 ORG := jenkins-x
 ORG_REPO := $(ORG)/$(NAME)
