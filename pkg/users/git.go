@@ -2,6 +2,7 @@ package users
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/jenkins-x/jx/pkg/kube/naming"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
@@ -86,7 +87,12 @@ func (r *GitUserResolver) Resolve(user *gits.GitUser) (*jenkinsv1.User, error) {
 			}
 		}
 		new := r.GitUserToUser(gitUser)
-		id = naming.ToValidName(gitUser.Login)
+		login := gitUser.Login
+		if login == "" {
+			login = strings.Replace(gitUser.Name, " ", "-", -1)
+			login = strings.ToLower(login)
+		}
+		id = naming.ToValidName(login)
 		// Check if the user id is available, if not append "-<n>" where <n> is some integer
 		for i := 0; true; i++ {
 			_, err := r.JXClient.JenkinsV1().Users(r.Namespace).Get(id, v1.GetOptions{})
